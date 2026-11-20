@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> Veredas de Boyacá</title>
+  <title>Veredas de Boyacá</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <style> html, body, #mapa { height: 100%; margin: 0; } </style>
+  <style>html, body, #mapa { height: 100%; margin: 0; }</style>
 </head>
 <body>
   <div id="mapa"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const mapa = L.map("mapa").setView([5.54, -73.36], 8);   // Boyacá
+    const mapa = L.map("mapa").setView([5.54, -73.36], 8); // Boyacá
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap"
     }).addTo(mapa);
@@ -19,14 +19,24 @@
     // Servicio vivo: Veredas de Boyacá (IDE Boyacá, FeatureServer)
     const url = "https://services6.arcgis.com/Ex2fmFOuTOHRZtML/ArcGIS/rest/services/"
       + "Veredas_Boyaca_2024/FeatureServer/0/query"
-      + "?where=1%3D1&outFields=Nombre,NOM_MPIO&outSR=4326&f=geojson";
+      + "?where=1%3D1&outFields=*&outSR=4326&f=geojson";
 
     fetch(url)
       .then(r => r.json())
       .then(geo => {
         L.geoJSON(geo, {
-          onEachFeature: (f, layer) =>
-            layer.bindPopup(`<b>${f.properties.Nombre}</b><br>${f.properties.NOM_MPIO}`)
+          style: {
+            color: "#1b4332",
+            weight: 1.5,
+            fillColor: "#52b788",
+            fillOpacity: 0.35
+          },
+          onEachFeature: (f, layer) => {
+            const p = f.properties || {};
+            const nombre = p.Nombre || p.NOMBRE_VEREDA || p.VEREDA || "Vereda";
+            const mpio = p.NOM_MPIO || p.MUNICIPIO || "";
+            layer.bindPopup(`<b>${nombre}</b><br>${mpio}`);
+          }
         }).addTo(mapa);
       });
   </script>
