@@ -1,0 +1,13 @@
+# Operaciones OGC — Consolidación
+
+## 1. WMS — GetCapabilities
+...
+
+## 2. WMS — GetMap (Área de Boyacá)
+...
+
+## 3. WFS — GetFeature (Filtrado en GeoJSON)
+...
+
+## 4. WMTS / Teselas
+...
